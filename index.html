@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script src="https://koda.nu/simple.js">
+
+        var zombies = [];
+        
+        var i = 0;
+        
+        while (i < 10)
+        {
+         zombies.push({x: random(totalWidth),
+                      y: random(totalHeight),
+                      speed: random(1,5)});
+          i+=1
+        }
+        hideMouse();
+        function update()
+        {  
+          clearScreen();
+          fill("black")
+          var i = 0;
+          
+          while (i < 10)
+          {
+              var zombie = zombies[i];
+              picture(zombie.x, zombie.y, "https://static.wikia.nocookie.net/animalrestaurant/images/1/19/Wild_Duck.png/revision/latest/scale-to-width-down/340?cb=20200112161544");
+              picture(mouse.x, mouse.y, "https://cindyinsd.files.wordpress.com/2010/04/boule2.png?w=584");
+              if (zombie.x < mouse.x)
+              zombie.x += zombie.speed;
+              else
+                zombie.x -= zombie.speed;
+              
+              if (zombie.y < mouse.y)
+              zombie.y += zombie.speed;
+              else
+                zombie.y -= zombie.speed;
+          
+              if (distance(mouse, zombie) < 5)
+          {
+              text(400, 200,150,"Game over!", "gray");
+              stopUpdate();
+          }
+           i +=1
+          }
+        }
+</script>      
+</body>
+</html>
