@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script src="http://koda.nu/simple.js">
+
+        var base = {x: 335, y: 300}
+        var zombies = [];
+        var zombiesKilled = 0;
+        
+        function bread()
+        {
+          rectangle(0, 0, 2000, 400, "#2ABAF0");
+          rectangle(0, 300, 2000, 100, "yellow");
+          circle(250, 360, 10, "#98654A");
+          circle(230, 340, 8, "#98654A");
+          circle(270, 380, 11, "#98654A");
+          circle(260, 340, 7, "brow#98654A");
+          circle(210, 360, 8, "#98654A"); 
+          rectangle(350, 200, 100, 100, "gray");
+          text(350, 250, 30, "Gift", "black")
+          circle(150, 100, 40, "white");
+          circle(200, 100, 40, "white");
+          circle(100, 100, 30, "white");
+          circle(550, 130, 30, "white");
+          circle(650, 150, 40, "white");
+          circle(600, 150, 40, "white");
+          circle(550, 150, 30, "white");
+          circle(650, 120, 30, "white");
+          circle(900, 120, 40, "white");
+          circle(1000, 110, 40, "white");
+          circle(150, 130, 30, "white");
+          circle(950, 110, 30, "white");
+
+
+        }
+          
+        function Zombie()
+        {
+          this.x = random(-100, totalWidth+100);
+          this.y = random(totalHeight+50, totalHeight+100);
+          this.speed = random(1,5);
+          this.dead  = false;
+      
+          this.update = function()
+          {
+            var xSpeed = (base.x-this.x)*this.speed/distance(this,base);
+            var ySpeed = (base.y-this.y)*this.speed/distance(this,base);
+            this.x += xSpeed;
+            this.y += ySpeed;
+          
+            picture(this.x-50, this.y-20, "https://static.wikia.nocookie.net/animalrestaurant/images/1/19/Wild_Duck.png");    
+          };
+        }
+        
+        function crosshair()
+        {
+          ring(mouse.x, mouse.y, 10, 3, "green");
+        }
+        
+        function gunshot()
+        {
+          line(base.x+75, base.y-80, mouse.x, mouse.y, 5, "green");
+          save();
+          translate(mouse.x, mouse.y);
+          restore(); 
+        }
+        
+        hideMouse();
+        
+        function update()
+        {
+          fill("#1F61B7");
+          bread();
+        
+          for (var i = 0; i < zombies.length; i++)
+          {
+            var zombie = zombies[i];
+          
+            if (zombie.dead) { continue; }
+          
+            zombie.update();
+          
+            if (keyboard.space && distance(mouse, zombie)<20)
+            {
+              zombiesKilled++;
+              circle(mouse.x, mouse.y, 15, "red");
+              zombie.dead = true;
+            }
+          
+            if (distance(zombie, base) < 50)
+            {
+              text(100, 200, 30, "Ankorna åt upp brödet!", "red");
+              showMouse();
+              stopUpdate();
+            }
+          }
+        
+          text(10, 45, 30, "Ankor dödade: "+ zombiesKilled, "red");
+        
+          if (random(10) == 0) { zombies.push(new Zombie()); }
+        
+          crosshair();
+          if (keyboard.space)
+            gunshot();
+        }
+       
+      </script>
+</body>
+</html>
