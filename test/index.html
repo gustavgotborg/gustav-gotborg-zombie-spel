@@ -9,11 +9,11 @@
 <body>
     <script src="http://koda.nu/simple.js">
 
-        var base = {x: 335, y: 300}
-        var zombies = [];
-        var zombiesKilled = 0;
+        var base = {x: 340, y: 300} //koordinater för basen som ankorna kommer jaga (brödbitarna)
+        var zombies = []; // variabel för ankorna
+        var zombiesKilled = 0; //variabel för antal dödade ankor
         
-        function bread()
+        function bread() // funktion för brödbitarna samt molnen och marken/himmelen 
         {
           rectangle(0, 0, 2000, 400, "#2ABAF0");
           rectangle(0, 300, 2000, 100, "yellow");
@@ -40,30 +40,30 @@
 
         }
           
-        function Zombie()
+        function Zombie() //funktion för hur ankorna kommer att röra sig 
         {
-          this.x = random(-100, totalWidth+100);
-          this.y = random(totalHeight+50, totalHeight+100);
-          this.speed = random(1,5);
-          this.dead  = false;
+          this.x = random(-100, totalWidth+100); //spawnar ankorna på en random x koordinat nedanför skärmen
+          this.y = random(totalHeight+50, totalHeight+100); //spawnar ankorna på en random y koordinat nedanför skärmen
+          this.speed = random(1,5); // ger ankorn en random speed
+          this.dead  = false; //ankorna försvinner när de blir förgiftade
       
-          this.update = function()
+          this.update = function() // funktionen gör att ankorna hela tiden åker mot basens koordinater.
           {
-            var xSpeed = (base.x-this.x)*this.speed/distance(this,base);
+            var xSpeed = (base.x-this.x)*this.speed/distance(this,base); 
             var ySpeed = (base.y-this.y)*this.speed/distance(this,base);
             this.x += xSpeed;
             this.y += ySpeed;
           
-            picture(this.x-50, this.y-20, "https://static.wikia.nocookie.net/animalrestaurant/images/1/19/Wild_Duck.png");    
+            picture(this.x-50, this.y-20, "https://static.wikia.nocookie.net/animalrestaurant/images/1/19/Wild_Duck.png");   //bilden för ankorna  
           };
         }
         
-        function crosshair()
+        function crosshair() //ger en grön liten ring stället för musen där man ska hälla giftet
         {
           ring(mouse.x, mouse.y, 10, 3, "green");
         }
         
-        function gunshot()
+        function gunshot() //linjen av gift som du skjuter på ankorna
         {
           line(base.x+75, base.y-80, mouse.x, mouse.y, 5, "green");
           save();
@@ -71,45 +71,45 @@
           restore(); 
         }
         
-        hideMouse();
+        hideMouse(); // gör musen osynlig
         
-        function update()
+        function update() 
         {
-          fill("#1F61B7");
+          fill("#1F61B7"); // fyller nedre delen med en blå vatten liknande färg.
           bread();
         
-          for (var i = 0; i < zombies.length; i++)
+          for (var i = 0; i < zombies.length; i++) // spawnar mer ankor varje gång de andra kommer in på skärmen 
           {
             var zombie = zombies[i];
           
-            if (zombie.dead) { continue; }
+            if (zombie.dead) { continue; } // låter spelt fortsätta även fast ankorna dör 
           
             zombie.update();
           
-            if (keyboard.space && distance(mouse, zombie)<20)
+            if (keyboard.space && distance(mouse, zombie)<20) // gör s att om distansen mellan den grön cirkeln när man skjuter är mindre än 20 kommer ankan att dö / försvinna
             {
               zombiesKilled++;
-              circle(mouse.x, mouse.y, 15, "red");
+              circle(mouse.x, mouse.y, 10, "red"); // skapar en liten röd cirkel som indikerar att du träffat giftet 
               zombie.dead = true;
             }
           
-            if (distance(zombie, base) < 50)
+            if (distance(zombie, base) < 50) // om distansen mellan ankorna och brödet är mindre än 50 kommer ankorna att vinna 
             {
-              text(100, 200, 30, "Ankorna åt upp brödet!", "red");
-              showMouse();
-              stopUpdate();
+              text(100, 300, 60, "Ankorna åt upp brödet!", "red");
+              text(100,400,60, "Ladda om sidan för att spela igen!", "red");
+              showMouse(); // visar musen igen
+              stopUpdate(); // avslutar spelet
             }
           }
         
-          text(10, 45, 30, "Ankor dödade: "+ zombiesKilled, "red");
+          text(1050, 170, 50, "Ankor förgiftade: "+ zombiesKilled, "red"); // text som räknar hur många ankor du har förgiftat
         
           if (random(10) == 0) { zombies.push(new Zombie()); }
         
-          crosshair();
+          crosshair(); // gör så att du kan skjuta med spacebar
           if (keyboard.space)
             gunshot();
         }
-       
       </script>
 </body>
 </html>
